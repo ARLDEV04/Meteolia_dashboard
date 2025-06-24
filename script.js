@@ -242,6 +242,21 @@ function exportToExcel() {
   XLSX.writeFile(wb, 'donnees_meteo.xlsx');
 }
 
+function exportToPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.text('Historique des données météo', 14, 15);
+  doc.autoTable({
+    html: '#data-table',
+    startY: 20,
+    styles: { fontSize: 8 }
+  });
+
+  doc.save('donnees_meteo.pdf');
+}
+
+
 
 //Active navbar
 const navToggle = document.querySelector('.nav-toggle');
