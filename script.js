@@ -243,6 +243,20 @@ navToggle.addEventListener('click', () => {
   navList.classList.toggle('active');
 });
 
+// Cacher la nav quand on clique sur un lien
+document.querySelectorAll('.nav-list a').forEach(link => {
+  link.addEventListener('click', () => {
+    navList.classList.remove('active');
+  });
+});
+
+document.addEventListener('click', function (e) {
+  if (!navList.contains(e.target) && !navToggle.contains(e.target)) {
+    navList.classList.remove('active');
+  }
+});
+
+
 //Afficher l'heure courante
 function updateDateTime() {
   const now = new Date();
