@@ -235,6 +235,14 @@ function updateUI(x) {
   }
 }
 
+// exproter excel
+function exportToExcel() {
+  const table = document.getElementById('data-table');
+  const wb = XLSX.utils.table_to_book(table, {sheet: "Données"});
+  XLSX.writeFile(wb, 'donnees_meteo.xlsx');
+}
+
+
 //Active navbar
 const navToggle = document.querySelector('.nav-toggle');
 const navList = document.querySelector('.nav-list');
