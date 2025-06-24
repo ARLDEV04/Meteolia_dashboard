@@ -253,8 +253,19 @@ function exportToPDF() {
     styles: { fontSize: 8 }
   });
 
-  doc.save('donnees_meteo.pdf');
+  // Méthode plus compatible mobile
+  const blob = doc.output('blob');
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'meteo.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
+
 
 
 
