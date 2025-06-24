@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meteolia</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+          <div class="container header-container">
+            <div class="logo">
+              <h1>Météolia</h1>
+            </div>
+        
+            <nav class="nav" id="stats">
+              <ul class="nav-list">
+                <li><a href="#stats">Stats</a></li>
+                <li><a href="#charts">Graphiques</a></li>
+                <li><a href="#table">Tableau</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </nav>
+        
+            <button class="nav-toggle" aria-label="Toggle navigation">
+              <span class="hamburger"></span>
+            </button>
+          </div>
+        </header>
+
+
+        <!-- Heure courante -->
+        <div id="current-datetime" style="margin-bottom: 1rem; padding-top: 30px;"></div>
+
+        <!-- Indicateur de connexion -->
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <div id="connection-indicator" style="width: 15px; height: 15px; border-radius: 50%; background-color: red; /* par défaut déconnecté */ border: 1px solid #333;"></div>
+            <span id="connection-status-text">Déconnecté</span>
+        </div>
+
+        <!-- Cartes de statut actuelles -->
+        <div class="stats-grid">
+            <div class="stat-card temp-card">
+                <div class="stat-header">
+                    <div class="icon-circle icon-red">
+                        🌡️
+                    </div>
+                    <span>📈</span>
+                </div>
+                <h3 class="stat-title">Température</h3>
+                <p class="stat-value red" id="current-temp"></p>
+                <p class="stat-subtitle">Dernière mise à jour</p>
+                <p class="stat-subtitle" id="stat-subtitle1">Dernière mise à jour</p>
+            </div>
+
+            <div class="stat-card humidity-card">
+                <div class="stat-header">
+                    <div class="icon-circle icon-blue">
+                        💧
+                    </div>
+                    <span>📈</span>
+                </div>
+                <h3 class="stat-title">Humidité relative</h3>
+                <p class="stat-value blue" id="current-humidity"></p>
+                <p class="stat-subtitle">Dernière mise à jour</p>
+                <p class="stat-subtitle" id="stat-subtitle2">Dernière mise à jour</p>
+            </div>
+        </div>
+
+        <!-- Graphiques -->
+        <div is="charts" style="padding: 20px;">
+            <h2>Graphiques</h2>
+        </div>
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 class="chart-title">Évolution de la Température</h3>
+                <div class="canvas-container">
+                    <canvas id="tempChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Évolution de l'Humidité</h3>
+                <div class="canvas-container">
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graphique combiné -->
+        <div class="combined-chart">
+            <h3 class="chart-title">Température et Humidité - Vue Combinée</h3>
+            <div class="combined-canvas-container">
+                <canvas id="combinedChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Tableau historique -->
+        <div id="table" style="padding: 20px;">
+            <h2>Tableau Historique</h2>
+        </div>
+        <div class="table-section">
+            <div class="table-header">
+                <h3 class="chart-title">Historique des Données</h3>
+                <div class="export-buttons">
+                    <button class="btn btn-green" onclick="exportToExcel()">
+                        ⬇️ Export Excel
+                    </button>
+                    <button class="btn btn-red" onclick="exportToPDF()">
+                        ⬇️ Export PDF
+                    </button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Heure</th>
+                            <th>Température</th>
+                            <th>Humidité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer" id="contact">
+        <div class="container footer-container">
+          <div class="contact-info">
+            <h2>Contactez-moi</h2>
+            <p>Email: <a href="mailto:mon.email@example.com">arielgnapie@gmail.com</a></p>
+            <p>Téléphone: <a href="tel:+33123456789">+225 01 41 69 78 82</a></p>
+            <p>Adresse: Bingerville, Abidjan, CIV.</p>
+          </div>
+          <div class="social-links">
+            <h2>Réseaux sociaux</h2>
+            <ul>
+              <li> <i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/ariel-gnapie-aabb012a4/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              <li> <i class="fa-brands fa-github"></i> <a href="https://github.com/ARLDEV04" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li> <i class="fa-brands fa-tiktok"></i> <a href="https://www.tiktok.com/@arielfav23" target="_blank" rel="noopener noreferrer">TikTok</a></li>
+            </ul>
+          </div>
+          <div class="social-links">
+            <h2>Navigation</h2>
+            <ul>
+              <li><a href="#stats">Stats</a></li>
+              <li><a href="#charts">Graphiques</a></li>
+              <li><a href="#table">Tableau</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="config.js"></script>
+</body>
+</html>
+
