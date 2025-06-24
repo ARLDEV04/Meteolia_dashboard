@@ -7,7 +7,7 @@ Les données sont transmises via WebSocket et affichées sous forme de graphique
 
 ## 🚀 Démo en ligne
 
-👉 [Voir le dashboard](https://ton-utilisateur.github.io/ton-repo/) *(hébergé via GitHub Pages)*
+👉 [Voir le dashboard](https://arldev04.github.io/Meteolia_dashboard/) *(hébergé via GitHub Pages)*
 
 ---
 
