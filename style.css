@@ -308,6 +308,7 @@ canvas {
 
 .table-container {
     overflow-x: auto;
+    height: 500px;
 }
 
 table {
@@ -320,6 +321,7 @@ th, td {
     padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
+
 }
 
 th {
@@ -332,6 +334,10 @@ th {
 td {
     font-size: 0.875rem;
     color: #374151;
+}
+
+tr{
+  overflow-y: 5px;
 }
 
 tr:nth-child(even) {

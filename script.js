@@ -1,4 +1,4 @@
-// 🔌 Connexion WebSocket
+// Connexion WebSocket
 const socket = io('https://node-servers.onrender.com', {
   transports: ['websocket', 'polling'],
   secure: true,
@@ -7,11 +7,11 @@ const socket = io('https://node-servers.onrender.com', {
 socket.on('connect', () => console.log('WebSocket connecté'));
 socket.on('disconnect', () => console.log('WebSocket déconnecté'));
 socket.on('new-data', data => {
-  console.log('📡 Données reçues via WS :', data);
+  console.log('Données reçues via websocket :', data);
   updateUI(data);
 });
 
-// ⚙️ Sélecteurs HTML
+// Sélecteurs HTML
 const tempDisplay = document.getElementById('current-temp');
 const humidityDisplay = document.getElementById('current-humidity');
 const tableBody = document.querySelector('#data-table tbody');
@@ -19,10 +19,10 @@ const subtitle1 = document.getElementById('stat-subtitle1');
 const subtitle2 = document.getElementById('stat-subtitle2')
 
 
-// 📉 Variables globales pour Chart.js
+// Variables globales pour Chart.js
 let tempChart, humidityChart, combinedChart;
 
-// ➤ Chargement initial + setInterval
+// Chargement initial + setInterval ***
 async function fetchData() {
   try {
     const res = await fetch('https://node-servers.onrender.com/api/data');
@@ -31,10 +31,10 @@ async function fetchData() {
 
     const reversed = [...data].reverse(); // ancien -> récent
     buildCharts(reversed);
-    populateTable(reversed);
+    populateTable(data);
     const latest = data[0];
     const dateObj = new Date(latest.date);
-    const formatted = `${dateObj.toLocaleDateString()} ${dateObj.toLocaleTimeString()}`;
+    const formatted = `${dateObj.toLocaleDateString()} à ${dateObj.toLocaleTimeString()}`;
     tempDisplay.textContent = `${latest.temperature.toFixed(1)} °C`;
     humidityDisplay.textContent = `${latest.humidite.toFixed(1)} %`;
     subtitle1.textContent = formatted;
@@ -47,7 +47,7 @@ async function fetchData() {
 fetchData();
 setInterval(fetchData, 60000);
 
-// 📊 Fonction pour créer ou mettre à jour les chartes
+// Fonction pour créer ou mettre à jour les chartes
 function buildCharts(data) {
   const labels = data.map(x => new Date(x.date).toLocaleTimeString());
   const temps = data.map(x => x.temperature);
@@ -162,7 +162,7 @@ function buildCharts(data) {
   }
 }
 
-// 🗃️ Remplir le tableau historique
+// Remplir le tableau historique
 function populateTable(data) {
   tableBody.innerHTML = '';
   data.reverse().forEach(x => {
@@ -178,7 +178,7 @@ function populateTable(data) {
   });
 }
 
-// 🔄 Mise à jour en temps réel via WebSocket
+// Mise à jour en temps réel via WebSocket
 function updateUI(x) {
   const d = new Date(x.date);
   const formatted = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
@@ -322,13 +322,12 @@ function setDisconnected() {
 
 // Lors de la connexion socket
 socket.on('connect', () => {
-  console.log('🟢 WebSocket connecté');
+  console.log('WebSocket connecté');
   setConnected();
 });
 
 // Lors de la déconnexion socket
 socket.on('disconnect', () => {
-  console.log('🔴 WebSocket déconnecté');
+  console.log('WebSocket déconnecté');
   setDisconnected();
 });
-
